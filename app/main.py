@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+app = FastAPI(title="Todo API")
 
 
 @app.get("/")
-async def root():
-    return {"message": "Hello World"}
+def root():
+    return {"message": "Welcome to the Todo API 🚀"}

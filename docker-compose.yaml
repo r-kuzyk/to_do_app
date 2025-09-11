@@ -23,6 +23,19 @@ services:
       - .:/code
     depends_on:
       - db
+    environment:
+      DATABASE_URL: postgresql+psycopg2://todo_user:todo_password@db:5432/todo_db
+
+  alembic:   # optional separate service for migrations
+    build: .
+    container_name: todo_alembic
+    command: alembic upgrade head
+    depends_on:
+      - db
+    volumes:
+      - .:/code
+    environment:
+      DATABASE_URL: postgresql+psycopg2://todo_user:todo_password@db:5432/todo_db
 
 volumes:
   postgres_data:
