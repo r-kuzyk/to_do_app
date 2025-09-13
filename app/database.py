@@ -6,9 +6,13 @@ import os
 DB_USER = os.getenv("POSTGRES_USER", "todo_user")
 DB_PASSWORD = os.getenv("POSTGRES_PASSWORD", "todo_password")
 DB_NAME = os.getenv("POSTGRES_DB", "todo_db")
-DB_HOST = os.getenv("DB_HOST", "db")
+DB_HOST = os.getenv("DB_HOST", "localhost")
 
-DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql+psycopg2://todo_user:todo_password@localhost:5432/todo_db"
+)
+# DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
