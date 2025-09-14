@@ -1,3 +1,5 @@
+import os
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
@@ -10,7 +12,7 @@ from app import database, models
 
 SECRET_KEY = "00177bb2475797382654e36309ceac34f82873ea7037820132e710f883f08efe"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

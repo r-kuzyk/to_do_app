@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from .. import models, schemas, database, auth
 
@@ -20,10 +20,19 @@ def create_todo(
 
 @router.get("/", response_model=list[schemas.TodoResponse])
 def get_todos(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1),
+    completed: bool | None = None,
     db: Session = Depends(database.get_db),
     current_user: models.User = Depends(auth.get_current_user),
 ):
-    return db.query(models.Todo).filter(models.Todo.owner_id == current_user.id).all()
+    query = db.query(models.Todo).filter(models.Todo.owner_id == current_user.id)
+    query = query.offset(skip).limit(limit)
+
+    if completed is not None:
+        query = query.filter(models.Todo.completed == completed)
+
+    return query.all()
 
 
 @router.get("/{todo_id}", response_model=schemas.TodoResponse)
